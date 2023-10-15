@@ -39,6 +39,38 @@ const MORSE_TABLE = {
 
 function decode(expr) {
     // write your solution here
+    let arr = expr.split('')
+    let dividedArr = []
+    const chunkSize = 10
+    for (let i = 0; i < arr.length; i += chunkSize) {
+        let chunk = arr.slice(i, i + chunkSize)
+        dividedArr.push(chunk)
+    }
+
+    let result = '';
+    let dotsDash = '';
+    let letter = '';
+    let word = '';
+    for (let i = 0; i < dividedArr.length; i++) {
+        let str = dividedArr[i].join('').replace(/00/gi, '')
+        if (str === '**********') word += ' ';
+
+        for (let i = 0; i <= str.length; i += 2) {
+            if (str[i] === '1' && str[i + 1] === '0') dotsDash += '.';
+            else if (str[i] === '1' && str[i + 1] === '1') dotsDash += '-';
+        }
+
+        result = dotsDash
+        dotsDash = ''
+
+        for (let key in MORSE_TABLE) {
+            if (result === key) {
+                letter = MORSE_TABLE[key]
+                word += letter
+            }
+        }
+    }
+    return word
 }
 
 module.exports = {
